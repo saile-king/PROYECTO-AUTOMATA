@@ -1,65 +1,242 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Maquina Dispenzadora</title>
-	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="estilo.css">
-</head>
-<body>
-	<div class="container">
-	  	<div class="row">
-	  	<div class="col-sm-12 text-center">
-	  		<h1>Maquina Expendedora</h1>
-	  		<hr>
-	  	</div>
-	    <div class="col-sm-6">
-	      <img src="images/maquina.png" class="refre">
-	    </div>
-	   
-	    <div class="col-sm-6 ">
-	    	<h2 class="form__titulo"><p id="demo" class="pantalla text-center"></p></h2>
-        		<p id="alerta" class="pantallas"></p>
-        		<hr>
-        		<br>
-        		<div class="text-center">
-               <button name="" id="cien"  value="100" onclick="sumar(this.value);"><img src="images/100.png" class="monedas"></button>
-                 <button name="" id="dociento" value="200"  onclick="sumar(this.value);"><img src="images/200.png" class="monedas"></button>
-                  <button name="" id="quiniento" value="500" onclick="sumar(this.value);"><img src="images/500.png" class="monedas"></button>
-                     <button name="" id="mil" value="1000"  onclick="sumar(this.value);"><img src="images/1000.png" class="monedas"></button><br>
-
-                     <button name="" id="mil" onclick=" Validar()" class="btn-success ">COMPRAR</button>
+    <head>
+        <title>Maquina Dispenzadora</title>
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="estilo.css">
+        <script src = "js/lib/jquery-3.3.1.js"></script>
+        <script src = "js/lib/arbor.js"></script>
+        <script src = "js/lib/arbor-tween.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h1>Maquina Expendedora</h1>
+                    <hr>
                 </div>
-             </div>
-	    </div>
-	  </div>
-	</div>
+                <div class="col-sm-4">
+                    <img src="images/maquina.png" class="refre">
+                </div>
 
-</body>
-<script type="text/javascript">
-	
+                <div class="col-sm-8 ">
+                    <h2 class="form__titulo"><p id="demo" class="pantalla text-center"></p></h2>
+                    <p id="alerta" class="pantallas"></p>
+                    <hr>
+                    <br>
+                    <div class="text-center">
+                        <button name="" id="cien"  value="100" onclick="sumar(this.value);"><img src="images/100.png" class="monedas"></button>
+                        <button name="" id="dociento" value="200"  onclick="sumar(this.value);"><img src="images/200.png" class="monedas"></button>
+                        <button name="" id="quiniento" value="500" onclick="sumar(this.value);"><img src="images/500.png" class="monedas"></button>
+                        <button name="" id="mil" value="1000"  onclick="sumar(this.value);"><img src="images/1000.png" class="monedas"></button><br>
 
-						function sumar(valor) {
-						    var total = 0;	
-						    valor = parseInt(valor); // Convertir el valor a un entero (número).
-							console.log(valor);
+                        <button name="" id="mil" onclick=" Validar()" class="btn-success ">COMPRAR</button>
+                    </div>
+                    <canvas id = "viewport" width = "800" height = "400"> </canvas>
+                </div>
 
-						    total = document.getElementById('demo').innerHTML;
-							
-						    // Aquí valido si hay un valor previo, si no hay datos, le pongo un cero "0".
-						    total = (total == null || total == undefined || total == "") ? 0 : total;
-							
-						    /* Esta es la suma. */
-						    total = (parseInt(total) + parseInt(valor));
-							
-						    // Colocar el resultado de la suma en el control "span".
-						    document.getElementById('demo').innerHTML = total;
-						}
+            </div>
+        </div>
 
 
-						function Validar(){
-							var precio = document.getElementById('demo').value;
-	
-							console.log(precio);
-						}
-						</script>
+    </body>
+    <script type="text/javascript">
+
+        (function ($) {
+            var Renderer = function (canvas) {
+                var canvas = $(canvas).get(0);
+                var ctx = canvas.getContext("2d");
+                var particleSystem;
+                var that = {
+                    init: function (system) {
+                        particleSystem = system;
+                        particleSystem.screenSize(canvas.width, canvas.height);
+                        particleSystem.screenPadding(100);
+                        that.initMouseHandling()
+                    },
+                    redraw: function () {
+                        ctx.fillStyle = "white";
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        particleSystem.eachEdge(function (edge, pt1, pt2) {
+                            ctx.strokeStyle = edge.data.linkcolor;
+                            ctx.lineWidth = 3;
+                            ctx.beginPath();
+                            ctx.moveTo(pt1.x, pt1.y);
+                            ctx.lineTo(pt2.x, pt2.y);
+                            ctx.stroke();
+                        });
+                        particleSystem.eachNode(function (node, pt) {
+                            ctx.beginPath();
+                            ctx.arc(pt.x, pt.y, 15, 0, 2 * Math.PI);
+                            ctx.fillStyle = node.data.nodecolor;
+                            ctx.fill();
+                            ctx.font = "18px Arial";
+                            ctx.fillStyle = "#000000";
+                            ctx.fillText(node.data.name, pt.x + 20, pt.y + 5);
+                        });
+                    },
+                    initMouseHandling: function () {
+                        var dragged = null;
+                        var handler = {
+                            clicked: function (e) {
+                                var pos = $(canvas).offset();
+                                _mouseP = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
+                                dragged = particleSystem.nearest(_mouseP);
+                                if (dragged && dragged.node !== null) {
+                                    dragged.node.fixed = true;
+                                }
+                                $(canvas).bind('mousemove', handler.dragged);
+                                $(window).bind('mouseup', handler.dropped);
+                                return false;
+                            },
+                            dragged: function (e) {
+                                var pos = $(canvas).offset();
+                                var s = arbor.Point(e.pageX - pos.left, e.pageY - pos.top);
+                                if (dragged && dragged.node !== null) {
+                                    var p = particleSystem.fromScreen(s);
+                                    dragged.node.p = p
+                                }
+                                return false;
+                            },
+                            dropped: function (e) {
+                                if (dragged === null || dragged.node === undefined)
+                                    return;
+                                if (dragged.node !== null)
+                                    dragged.node.fixed = false;
+                                dragged.node.tempMass = 1000;
+                                dragged = null;
+                                $(canvas).unbind('mousemove', handler.dragged);
+                                $(window).unbind('mouseup', handler.dropped);
+                                _mouseP = null;
+                                return false;
+                            }
+                        };
+                        $(canvas).mousedown(handler.clicked);
+                    }
+                }
+                return that;
+            }
+
+            var numOpcion = 1500 / 100;
+
+            var estados = new Array(numOpcion);
+
+            for (var i = 0; i <= numOpcion; i++) {
+                var a1 = 100 * (i + 1);
+                var a2 = 100 * (i + 2);
+                var a5 = 100 * (i + 5);
+                var a10 = 100 * (i + 10);
+
+                if (a1 > numOpcion * 100) {
+                    a1 = '';
+                }
+                ;
+                if (a2 > numOpcion * 100) {
+                    a2 = '';
+                }
+                ;
+                if (a5 > numOpcion * 100) {
+                    a5 = '';
+                }
+                ;
+                if (a10 > numOpcion * 100) {
+                    a10 = '';
+                }
+                ;
+
+                var obj = {
+                    alf_1: a1,
+                    alf_2: a2,
+                    alf_5: a5,
+                    alf_10: a10
+                };
+                estados[i] = obj;
+            }
+
+            $(document).ready(function () {
+                var sys = arbor.ParticleSystem(700, 700, 0.5);
+                sys.renderer = Renderer("#viewport");
+
+                estados.forEach(function callback(element, i) {
+                    if (i == 0) {
+                        sys.addNode("0", {name:"0", nodecolor: "#88cc88"});
+                    } else {
+                        sys.addNode(i + "00", {name: i + "00", nodecolor: "#88cc88"});
+                    }
+                });
+
+                estados.forEach(function callback(element, i) {
+
+                    if (element.alf_1 != "") {
+                        if (i == 0) {
+                            sys.addEdge("0", element.alf_1, {linkcolor: "#888888"});
+                        } else {
+                            sys.addEdge(i + "00", element.alf_1, {linkcolor: "#888888"});
+                        }
+                        
+                    }
+                    ;
+                    if (element.alf_2 != "") {
+                        if (i == 0) {
+                            sys.addEdge("0", element.alf_2, {linkcolor: "#888888"});
+                        } else {
+                            sys.addEdge(i + "00", element.alf_2, {linkcolor: "#888888"});
+                        }
+                    }
+                    ;
+                    if (element.alf_5 != "") {
+                       if (i == 0) {
+                            sys.addEdge("0", element.alf_5, {linkcolor: "#888888"});
+                        } else {
+                            sys.addEdge(i + "00", element.alf_5, {linkcolor: "#888888"});
+                        }
+                    }
+                    ;
+                    if (element.alf_10 != "") {
+                        if (i == 0) {
+                            sys.addEdge("0", element.alf_10, {linkcolor: "#888888"});
+                        } else {
+                            sys.addEdge(i + "00", element.alf_10, {linkcolor: "#888888"});
+                        }
+                    }
+                });
+                /*sys.addNode('Node 1', {name: "Node 1", nodecolor: "#88cc88"});
+                 sys.addNode('Node 2', {name: "Node 2", nodecolor: "#888888"});
+                 sys.addNode('Node 3', {name: "Node 3", nodecolor: "#888888"});
+                 sys.addNode('Node 4', {name: "Node 4", nodecolor: "#888888"});
+                 sys.addNode('Node 5', {name: "Node 5", nodecolor: "#888888"});
+                 sys.addNode('Node 6', {name: "Node 6", nodecolor: "#888888"});
+                 sys.addEdge('Node 1', 'Node 3', {linkcolor: "#888888"});
+                 sys.addEdge('Node 1', 'Node 2', {linkcolor: "#888888"});
+                 sys.addEdge('Node 2', 'Node 5', {linkcolor: "#ff8888"});
+                 sys.addEdge('Node 2', 'Node 4', {linkcolor: "#ff8888"});
+                 sys.addEdge('Node 4', 'Node 5', {linkcolor: "#ff8888"});
+                 sys.addEdge('Node 5', 'Node 6', {linkcolor: "#888888"});*/
+            })
+        })(this.jQuery);
+
+        function sumar(valor) {
+            var total = 0;
+            valor = parseInt(valor); // Convertir el valor a un entero (número).
+            console.log(valor);
+
+            total = document.getElementById('demo').innerHTML;
+
+            // Aquí valido si hay un valor previo, si no hay datos, le pongo un cero "0".
+            total = (total == null || total == undefined || total == "") ? 0 : total;
+
+            /* Esta es la suma. */
+            total = (parseInt(total) + parseInt(valor));
+
+            // Colocar el resultado de la suma en el control "span".
+            document.getElementById('demo').innerHTML = total;
+        }
+
+
+        function Validar() {
+            var precio = document.getElementById('demo').value;
+
+            console.log(precio);
+        }
+    </script>
 </html>
