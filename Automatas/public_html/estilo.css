@@ -1,0 +1,153 @@
+* {
+    
+    box-sizing: border-box;
+}
+body{
+    margin: 0px;
+    font-family: sans-serif;
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ff4b3a+5,ff3019+76,ff3019+76,ce0000+100 */
+background: #5a89b1; /* Old browsers */
+}
+
+}
+.form__titulo{
+    text-align-last: center;
+    background: #d3e3e4;
+    margin-top: 0px;
+    color: white;
+    padding: 20px;
+    font-weight: 100px;
+    font-size: 34px;
+    border-top-left-radius: 7px;
+    border-bottom: 5px  #176;
+    box-shadow: 0px 7px 20px rgba(0,0,0,0.5);
+    height: 150px;
+    
+}
+.pantalla{
+margin-top: -3px;
+width: 100%;
+height: 70px;
+color: #fdfdfd;
+border: 30px;
+background-color: #747474;
+box-shadow: 0px 7px 20px rgba(0,3,2,2);
+text-align: justify;
+font-family: sans-serif;
+
+}
+.pantallas{
+margin-top: -20px;
+margin-left: 62px;
+width: 70%;
+height: 34px;
+color: #FBFBFB;
+border: 30px;
+background-color: #747474;
+box-shadow: 0px 7px 20px rgba(0,3,2,2);
+text-align: center;
+font-family: cursive;
+font-size: 17px;
+
+}
+
+.refre{
+    width: 350px;
+    margin-top: 5px;
+    margin-left: -44px;
+    border-radius: 20px;
+    border: 40px;
+     box-shadow: 0px 7px 20px rgba(0,0,0,3);
+    
+}
+.subcon{
+    width: 40%;
+    margin-top: -438px;
+    margin-left: 298px;
+    background: #6c99ffc4;
+    padding: 14px;
+    font-weight: 100px;
+    border-radius: 20px;
+    border-bottom: 7px  #176;
+    box-shadow: 0px 7px 20px rgba(0,0,0,0.5);
+}
+input{
+    
+    margin-bottom: 20px;
+    padding: 7px;
+    font-size: 12px;
+    border-radius: 7px;
+    border: 1px solid darkgray;
+    border-radius: 3px 4px;
+}
+
+.input-48{
+    
+    width: 49%;
+}
+.input-100{
+    
+    width: 100%;
+}
+.input-4{
+      width: 100%;
+    
+}
+.btn-enviar{
+    background: #AC2C12;
+    color:#fff;
+    margin: auto;
+    padding: 10px 40px;
+    cursor:pointer;
+    margin-left: 210px;
+    margin-top: 20px;
+   
+}
+.btn-enviar:hover {
+    background-color:#DE0A0A;
+    width: 98px;
+    color:#F69E9E;
+    box-shadow: 1px 3px 3px 4px;
+}
+
+
+h1{
+ margin-top: 0px;
+text-align-last: center;
+text-shadow:5px -3px 9px rgba(71, 64, 64, 0.95);
+font-size:70px;
+color: #FFF7F7;
+font-family:Alegreya;
+}
+   
+.monedas{
+    border-radius: 50px;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    margin-top: 15px;
+
+}
+.monedas:hover {
+    background-color:#DE0A0A;
+    color:#F69E9E;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+
+}
+h3{
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    font-size: 29px;
+    color: #F98B8B;
+    text-align: center;
+
+
+}
+ 
+   
+}
+h2{
+    text-align-last: center;
+   
+}
