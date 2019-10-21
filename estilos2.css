@@ -1,0 +1,30 @@
+* {
+    
+    box-sizing: border-box;
+}
+body{
+    margin: 0px;
+    font-family: sans-serif;
+background: rgb(228,239,192); /* Old browsers */
+background: -moz-radial-gradient(center, ellipse cover, rgba(228,239,192,1) 43%, rgba(171,189,115,1) 100%); /* FF3.6-15 */
+background: -webkit-radial-gradient(center, ellipse cover, rgba(228,239,192,1) 43%,rgba(171,189,115,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: radial-gradient(ellipse at center, rgba(228,239,192,1) 43%,rgba(171,189,115,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4efc0', endColorstr='#abbd73',GradientType=1 );
+}
+h1{
+    text-align-last: center;
+    color: white;
+}
+.tabla{
+    margin-left: 170px;
+ 
+}
+.tabla td{
+     border: 1px solid;
+     width: 170px;  
+}
+.tabla td:hover{
+    font-family:fantasy;
+    font-size: 20px;
+    background-color: darkseagreen;
+}
